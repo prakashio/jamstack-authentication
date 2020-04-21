@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Router } from "@reach/router";
 import Layout from "../components/layout";
 import Profile from "../components/profile";
+import PrivateRoute from "../components/private-route";
 import RouteBase from "../components/route-base";
 import RouteSecrets from "../components/route-secrets";
 import RouteLogin from "../components/route-login";
@@ -13,7 +14,7 @@ import "react-netlify-identity-widget/styles.css";
 const Dashboard = ({ location }) => {
   const [isVisible, setVisible] = useState(false);
 
-  const showLogin = () => setVisible(true);
+  const showModal = () => setVisible(true);
 
   useEffect(() => {
     if (location.pathname.match(/^\/dashboard\/?$/)) {
@@ -23,11 +24,11 @@ const Dashboard = ({ location }) => {
 
   return (
     <Layout>
-      <Profile></Profile>
+      <Profile showModal={showModal}></Profile>
       <Router>
-        <RouteBase path="/dashboard/base" />
-        <RouteSecrets path="/dashboard/secrets" />
-        <RouteLogin path="/dashboard/login" login={showLogin} />
+        <PrivateRoute component={RouteBase} path="/dashboard/base" />
+        <PrivateRoute component={RouteSecrets} path="/dashboard/secrets" />
+        <RouteLogin path="/dashboard/login" showModal={showModal} />
       </Router>
       <IdentityModal
         showDialog={isVisible}
